@@ -1,0 +1,13 @@
+[Service]
+WorkingDirectory=/srv/chattica
+ExecStart=/usr/bin/npm start
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=propanel
+User=pi
+Group=pi
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target

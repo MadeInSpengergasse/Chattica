@@ -1,0 +1,8 @@
+static/bower_components/
+
+.idea/
+
+__pycache__/
+
+node_modules/
+

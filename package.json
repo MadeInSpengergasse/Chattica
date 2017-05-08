@@ -1,0 +1,10 @@
+{
+  "name": "chattica",
+  "version": "0.0.1",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "latest",
+    "express-sse": "latest",
+    "redis": "latest"
+  }
+}
