@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="chatticaApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat - Chattica</title>
+    <link rel="stylesheet" href="css/index.css">
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="js/index.js"></script>
+</head>
+<body ng-controller="ChatController" id="main">
+<input type="text" ng-model="message">
+<button ng-click="sendMessage(message);">Submit</button>
+
+<div id="chatmessages" ng-bind-html="chatmessages"><p>test</p></div>
+
+</body>
+</html>

@@ -1,15 +1,30 @@
 var app = angular.module("chatticaApp", []);
 
-app.controller("MainController", function($scope, $http) {
+app.controller("MainController", function ($scope, $http, $location) {
+    $scope.login = function(username, password) {
+        $http.post("/login", {username: username, password: password}).then(function(response) {
+            console.log(response.data);
+            $location.path('/chat')
+        });
+    }
+});
 
-    $http.get("/current_values").success(function(data)  {
-
-    });
+app.controller("ChatController", function ($scope, $http) {
+    console.log("CHATCONTROLLER");
+    $scope.chatmessages_div = angular.element(document.querySelector('#chatmessages'));
 
     var source = new EventSource('/stream');
-    source.addEventListener('message', function(event) {
+    source.addEventListener('message', function (event) {
         var data = JSON.parse(event.data);
-        console.log(data);
+        console.log("Got new message! " + JSON.stringify(data));
+
+        $scope.chatmessages_div.append('<div class="message">' + data.newmessage + '</div>');
     }, false);
 
+    $scope.sendMessage = function (message) {
+        console.log("send message with text " + message);
+        $http.post("/send_message", {"message": message}).then(function (response) {
+            console.log("sent message");
+        });
+    }
 });
