@@ -9,7 +9,7 @@ app.controller("MainController", function ($scope, $http, $location) {
     }
 });
 
-app.controller("ChatController", function ($scope, $http) {
+app.controller("ChatController", function ($scope, $http, $location) {
     console.log("CHATCONTROLLER");
     $scope.chatmessages_div = angular.element(document.querySelector('#chatmessages'));
 
@@ -24,7 +24,19 @@ app.controller("ChatController", function ($scope, $http) {
     $scope.sendMessage = function (message) {
         console.log("send message with text " + message);
         $http.post("/send_message", {"message": message}).then(function (response) {
+            console.log(response.data);
+            if(response.data.status === "error") {
+                alert("There was an error sending your message.")
+            }
             console.log("sent message");
+        });
+    };
+
+    $scope.logout = function() {
+        console.log("logging out.");
+        $http.post('/logout').then(function(response) {
+            console.log("was logged out.");
+            $location.path('/')
         });
     }
 });

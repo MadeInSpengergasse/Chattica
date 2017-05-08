@@ -51,6 +51,11 @@ app.post('/login', function(req, res) {
     }
 });
 
+app.post('/logout', function(req, res) {
+    req.session.loggedIn = false;
+    res.send({status: "success"});
+});
+
 //TODO Move to websockets instead of SSE
 app.get('/stream', sse.init);
 
