@@ -5,14 +5,11 @@
     <title>Chattica</title>
     <link rel="stylesheet" href="css/index.css">
     <script src="bower_components/angular/angular.min.js"></script>
-    <script src="js/index.js"></script>
+    <script src="bower_components/angular-route/angular-route.min.js"></script>
+    <script src="js/chattica.js"></script>
 </head>
-<body ng-controller="MainController" id="main">
-<h3>Welcome to Chattica!</h3>
-<p>Please log in!</p>
-<div>Username: </div><input type="text" ng-model="username">
-<div>Password: </div><input type="password" ng-model="password">
-<button ng-click="login(username, password)">Log in</button>
-
+<body>
+<h1>Chattica</h1>
+<div ng-view style="margin: 30px;"></div>
 </body>
 </html>
