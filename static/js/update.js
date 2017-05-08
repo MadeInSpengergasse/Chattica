@@ -1,4 +1,4 @@
-var app = angular.module("praesentationsApp", []);
+var app = angular.module("chatticaApp", []);
 
 app.controller("MainController", function ($scope, $http) {
     $http.get("/current_values").success(function (data) {
