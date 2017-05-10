@@ -29,7 +29,7 @@ app.use(session(sess));
 
 app.post('/send_message', function (req, res) {
     if(!req.session.loggedIn) {
-        res.send({status: "error", error_message: "You are not logged in."});
+        res.json({status: "error", error_message: "You are not logged in."});
         console.log("Somebody is not logged in!");
         return;
     }
@@ -39,21 +39,25 @@ app.post('/send_message', function (req, res) {
     console.log(req.session);
 
     sse.send({"newmessage": req.body.message});
-    res.send({"status": "success"});
+    res.json({"status": "success"});
 });
 
 app.post('/login', function(req, res) {
     if(req.body.username == "luca" && req.body.password == "abc") {
         req.session.loggedIn = true;
-        res.send({status: "success"});
+        res.json({status: "success"});
     } else {
-        res.send({status: "error", error_message: "Invalid username or password."});
+        res.json({status: "error", error_message: "Invalid username or password."});
     }
 });
 
 app.post('/logout', function(req, res) {
     req.session.loggedIn = false;
-    res.send({status: "success"});
+    res.json({status: "success"});
+});
+
+app.post('/register', function(req, res) {
+    console.log(req.body)
 });
 
 //TODO Move to websockets instead of SSE
