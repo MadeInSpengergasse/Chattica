@@ -12,7 +12,7 @@ var sse = new SSE([]);
 var app = express();
 
 app.use(bodyParser.json({limit: "10mb"}));
-app.use(express.static('static', {extensions: ['html']}));
+app.use(express.static(__dirname, {extensions: ['html']}));
 
 var sess = {
     secret: 'keyboard cat',
