@@ -65,7 +65,7 @@ app.get('/api/hello', function(req, res) {
 });
 
 //TODO Move to websockets instead of SSE
-app.get('/stream', sse.init);
+app.get('/api/stream', sse.init);
 
 var port = 3000;
 app.listen(port);
