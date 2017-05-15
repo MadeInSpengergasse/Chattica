@@ -7,10 +7,11 @@ import {AppComponent} from "./app.component";
 import {AppRoutingModule} from "./app-routing.module";
 import {LoginComponent} from "./login/login.component";
 import {ChatComponent} from "./chat/chat.component";
-import {AuthGuard} from "./auth-guard.service";
-import {AuthService} from "./auth.service";
-import { HomeComponent } from './home/home.component';
-import { RegisterComponent } from './register/register.component';
+import {AuthGuard} from "./services/auth-guard.service";
+import {AuthService} from "./services/auth.service";
+import {HomeComponent} from "./home/home.component";
+import {RegisterComponent} from "./register/register.component";
+import {ChatService} from "./services/chat.service";
 
 @NgModule({
   declarations: [
@@ -26,7 +27,11 @@ import { RegisterComponent } from './register/register.component';
     HttpModule,
     AppRoutingModule
   ],
-  providers: [AuthGuard, AuthService],
+  providers: [
+    AuthGuard,
+    AuthService,
+    ChatService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
