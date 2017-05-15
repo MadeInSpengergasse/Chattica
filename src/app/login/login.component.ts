@@ -26,7 +26,6 @@ export class LoginComponent implements OnInit {
         if(res.status == "error") {
           alert("ERRROR! Message: " + res.error_message);
         } else {
-          alert("Logged in.");
           this._router.navigate(['chat']);
         }
       });

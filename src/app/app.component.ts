@@ -22,6 +22,10 @@ export class AppComponent implements OnInit {
       .subscribe(res => {
         console.log("getSession()");
         console.log(res);
+        if(res.status == "success") {
+          this._authService.isLoggedIn = true;
+          this._authService.user = res.data;
+        }
       });
   }
 
@@ -31,7 +35,6 @@ export class AppComponent implements OnInit {
         if (res.status == "error") {
           alert("ERRROR! Message: " + res.error_message);
         } else {
-          alert("Logout successful.");
           this._router.navigate(['']);
         }
       });

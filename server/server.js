@@ -12,6 +12,16 @@ var RedisStore = require('connect-redis')(session);
 var sse = new SSE([]);
 var app = express();
 
+var error_count = 0;
+client.on("error", function (err) {
+  console.log("Redis error: " + err);
+  error_count++;
+  if(error_count > 5) {
+    console.log("Exiting because of high error count.");
+    process.exit(1);
+  }
+});
+
 app.use(bodyParser.json({limit: "10mb"}));
 // app.use(express.static(__dirname + "/../dist/", {extensions: ['html']}));
 
@@ -29,21 +39,6 @@ if (app.get('env') === 'production') {
 }
 
 app.use(session(sess));
-
-/*app.post('/send_message', function (req, res) {
- if (!req.session.loggedIn) {
- res.json({status: "error", error_message: "You are not logged in."});
- console.log("Somebody is not logged in!");
- return;
- }
-
- console.log("/send_message");
- console.log(req.body);
- console.log(req.session);
-
- sse.send({"newmessage": req.body.message});
- res.json({"status": "success"});
- });*/
 
 app.post('/api/login', function (req, res) {
   if (req.body.username == "luca" && req.body.password == "abc") {
@@ -89,7 +84,6 @@ wss.on('connection', function connection(ws) {
 });
 
 var port = 3000;
-
 app.listen(port);
 
 console.log("Server is running on port " + port);

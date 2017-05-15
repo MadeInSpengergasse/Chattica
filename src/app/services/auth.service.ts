@@ -9,6 +9,7 @@ import {Status} from "../models/status";
 @Injectable()
 export class AuthService {
   isLoggedIn = false;
+  user: User;
 
   constructor(private _http: Http) {
 
@@ -22,6 +23,7 @@ export class AuthService {
 
   logout(): Observable<Status<null>> {
     this.isLoggedIn = false;
+    this.user = null;
     return this._http.post("/api/logout", {}).map(res => res.json());
   }
 
