@@ -1,5 +1,5 @@
-import {Component, OnInit} from "@angular/core";
-import {ChatService} from "../services/chat.service";
+import {Component, OnInit} from '@angular/core';
+import {ChatService} from '../services/chat.service';
 
 @Component({
   selector: 'app-chat',
@@ -15,7 +15,7 @@ export class ChatComponent implements OnInit {
   ngOnInit() {
     this._chatService.getDataStream()
       .subscribe(a => {
-        console.log("new event from ws");
+        console.log('new event from ws');
         console.log(a);
       });
   }

@@ -1,6 +1,6 @@
-import {Component, OnInit} from "@angular/core";
-import {AuthService} from "./services/auth.service";
-import {Router} from "@angular/router";
+import {Component, OnInit} from '@angular/core';
+import {AuthService} from './services/auth.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -20,9 +20,9 @@ export class AppComponent implements OnInit {
   getSession() {
     this._authService.getSession()
       .subscribe(res => {
-        console.log("getSession()");
+        console.log('getSession()');
         console.log(res);
-        if(res.status == "success") {
+        if (res.status === 'success') {
           this._authService.isLoggedIn = true;
           this._authService.user = res.data;
         }
@@ -32,10 +32,10 @@ export class AppComponent implements OnInit {
   logout() {
     this._authService.logout()
       .subscribe(res => {
-        if (res.status == "error") {
-          alert("ERRROR! Message: " + res.error_message);
-        } else {
+        if (res.status === 'success') {
           this._router.navigate(['']);
+        } else {
+          alert('ERRROR! Message: ' + res.error_message);
         }
       });
   }
