@@ -23,7 +23,7 @@ client.on("error", function (err) {
 });
 
 app.use(bodyParser.json({limit: "10mb"}));
-// app.use(express.static(__dirname + "/../dist/", {extensions: ['html']}));
+app.use(express.static(__dirname + "/", {extensions: ['html']}));
 
 var sess = {
   secret: 'keyboard cat',

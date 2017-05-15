@@ -5,10 +5,13 @@
   "scripts": {
     "ng": "ng",
     "start": "concurrently \"npm run nodemon\" \"npm run ngserve\"",
-    "build": "ng build",
+    "start:dist": "node dist/server.js",
+    "build": "npm run build:ng && npm run build:node",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
+    "build:ng": "ng build -prod",
+    "build:node": "cp server/server.js dist/",
     "ngserve": "ng serve --proxy-config proxy.conf.json",
     "nodemon": "nodemon server/server.js"
   },

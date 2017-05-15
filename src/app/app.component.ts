@@ -17,6 +17,10 @@ export class AppComponent implements OnInit {
     this.getSession();
   }
 
+  isLoggedIn(): boolean {
+    return this._authService.isLoggedIn;
+  }
+
   getSession() {
     this._authService.getSession()
       .subscribe(res => {
