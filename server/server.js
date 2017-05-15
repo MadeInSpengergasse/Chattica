@@ -44,6 +44,7 @@ app.post('/send_message', function (req, res) {
 
 app.post('/api/login', function(req, res) {
     if(req.body.username == "luca" && req.body.password == "abc") {
+      console.log(req.session);
         req.session.loggedIn = true;
         res.json({status: "success"});
     } else {
