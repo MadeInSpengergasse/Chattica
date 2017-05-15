@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from "../auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -9,7 +10,7 @@ import {AuthService} from "../auth.service";
 export class LoginComponent implements OnInit {
   model: any = {};
 
-  constructor(private _authService: AuthService) { }
+  constructor(private _authService: AuthService, private _router: Router) { }
 
   ngOnInit() {
   }
@@ -22,7 +23,12 @@ export class LoginComponent implements OnInit {
     this._authService.login(this.model.username, this.model.password)
       .subscribe(res => {
         console.log(res);
-
+        if(res.status == "error") {
+          alert("ERRROR! Message: " + res.error_message);
+        } else {
+          alert("Logged in.");
+          this._router.navigate(['chat']);
+        }
       });
   }
 

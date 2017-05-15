@@ -9,9 +9,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="200mm"
-   height="200mm"
-   viewBox="0 0 200 200"
+   width="140.04924mm"
+   height="140.04924mm"
+   viewBox="0 0 140.04924 140.04924"
    version="1.1"
    id="svg8"
    sodipodi:docname="logo.svg"
@@ -19,7 +19,7 @@
   <defs
      id="defs2">
     <filter
-       style="color-interpolation-filters:sRGB;"
+       style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter4982">
       <feFlood
@@ -59,8 +59,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.98994949"
-     inkscape:cx="193.09248"
-     inkscape:cy="399.84833"
+     inkscape:cx="143.94439"
+     inkscape:cy="286.55556"
      inkscape:document-units="mm"
      inkscape:current-layer="layer2"
      showgrid="false"
@@ -68,7 +68,11 @@
      inkscape:window-height="1011"
      inkscape:window-x="0"
      inkscape:window-y="0"
-     inkscape:window-maximized="1" />
+     inkscape:window-maximized="1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -84,7 +88,8 @@
   <g
      inkscape:groupmode="layer"
      id="layer3"
-     inkscape:label="Background">
+     inkscape:label="Background"
+     transform="translate(-29.97538,-29.97538)">
     <circle
        style="fill:#673ab7;fill-opacity:1;stroke:none;stroke-width:0.26499999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="path4506"
@@ -96,7 +101,8 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Layer 1"
-     style="display:inline">
+     style="display:inline"
+     transform="translate(-29.97538,-29.97538)">
     <path
        id="path4510"
        d="m 132.04543,80.713627 c 0,-3.557053 -2.88404,-6.409097 -6.40902,-6.409097 H 74.363584 a 6.409093,6.409093 0 0 0 -6.409013,6.409097 v 38.454583 a 6.409093,6.409093 0 0 0 6.409013,6.40911 h 44.863686 l 12.81816,12.81819 z"

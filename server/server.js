@@ -12,7 +12,7 @@ var sse = new SSE([]);
 var app = express();
 
 app.use(bodyParser.json({limit: "10mb"}));
-// app.use(express.static(__dirname + "/../src/", {extensions: ['html']}));
+// app.use(express.static(__dirname + "/../dist/", {extensions: ['html']}));
 
 var sess = {
     secret: 'keyboard cat',
@@ -62,7 +62,8 @@ app.post('/register', function(req, res) {
 });
 
 app.get('/api/hello', function(req, res) {
-  res.send("hello world!")
+  res.send("hello world!");
+  console.log(req.session);
 });
 
 //TODO Move to websockets instead of SSE
