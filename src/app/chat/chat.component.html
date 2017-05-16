@@ -1,10 +1,12 @@
 <div class="col-lg-6">
   <div class="input-group">
-    <input type="text" class="form-control" placeholder="Send message..." [(ngModel)]="chatMessage">
+    <input type="text" class="form-control" placeholder="Send message..." [(ngModel)]="currentMessage"
+           (keyup.enter)="sendMessage()">
     <span class="input-group-btn">
         <button class="btn btn-secondary" type="button" (click)="sendMessage()">Submit</button>
       </span>
   </div>
 </div>
 
-<div id="chatmessages"></div>
+<div id="chatmessages" *ngFor="let chatMessage of chatMessages"><b>{{chatMessage.username}}: </b>{{chatMessage.message}}
+</div>

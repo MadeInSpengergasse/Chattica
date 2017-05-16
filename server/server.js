@@ -75,12 +75,34 @@ app.get('/api/session', function (req, res) {
   }
 });
 
+var ws_array = [];
+
 wss.on('connection', function connection(ws) {
+  ws_array.push(ws);
   ws.on('message', function incoming(message) {
     console.log('received: %s', message);
+    ws_array.forEach(function (client) {
+      if (client.readyState === client.OPEN) {
+        var username = "not-specified-yet";
+        client.send(JSON.stringify({username: username, message: message}));
+      } else {
+        console.log("Failed to send message to client (because socket is not open)! Ignoring.");
+      }
+    });
   });
+  ws.send(JSON.stringify({username: "System", message: "Welcome to the server!"}));
 
-  ws.send('something');
+  ws.on('close', function () {
+    // ws_array
+    console.log("Should remove client from array.");
+    var idx = ws_array.indexOf(ws);
+    if (idx !== -1) {
+      ws_array.splice(idx, 1);
+      console.log("Removed client.");
+    } else {
+      console.log("Failed to remove client!");
+    }
+  });
 });
 
 var port = 3000;
