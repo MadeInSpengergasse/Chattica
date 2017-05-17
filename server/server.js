@@ -38,7 +38,8 @@ if (app.get('env') === 'production') {
   sess.cookie.secure = true; // serve secure cookies
 }
 
-app.use(session(sess));
+var sessionParser = session(sess);
+app.use(sessionParser);
 
 app.post('/api/login', function (req, res) {
   if (req.body.username == "luca" && req.body.password == "abc") {
@@ -46,6 +47,11 @@ app.post('/api/login', function (req, res) {
     req.session.loggedIn = true;
     req.session.user = {};
     req.session.user.username = "luca";
+    res.json({status: "success"});
+  } else if(req.body.username == "adrian" && req.body.password == "abc") {
+    req.session.loggedIn = true;
+    req.session.user = {};
+    req.session.user.username = "adrian";
     res.json({status: "success"});
   } else {
     res.json({status: "error", error_message: "Invalid username or password."});
@@ -75,15 +81,28 @@ app.get('/api/session', function (req, res) {
   }
 });
 
+app.get('*', function(req, res) {
+  res.sendfile(__dirname + "/index.html");
+});
+
+/* --- END EXPRESS --- */
+/* --- START WEBSOCKETS --- */
 var ws_array = [];
 
 wss.on('connection', function connection(ws) {
+  // "Inject" (?) express-session variables into ws -> http://stackoverflow.com/a/27727505/3527128
+  sessionParser(ws.upgradeReq, {}, function(){
+    console.log(ws.upgradeReq.session);
+    // do stuff with the session here
+  });
+
   ws_array.push(ws);
   ws.on('message', function incoming(message) {
     console.log('received: %s', message);
     ws_array.forEach(function (client) {
       if (client.readyState === client.OPEN) {
-        var username = "not-specified-yet";
+        // var username = "not-specified-yet";
+        var username = ws.upgradeReq.session.user.username;
         client.send(JSON.stringify({username: username, message: message}));
       } else {
         console.log("Failed to send message to client (because socket is not open)! Ignoring.");

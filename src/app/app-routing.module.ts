@@ -11,7 +11,7 @@ const appRoutes: Routes = [
   {path: '', component: HomeComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
-  {path: 'chat', component: ChatComponent, canActivate: [AuthGuard]}
+  {path: 'chat', component: ChatComponent /*, canActivate: [AuthGuard]*/}
 ];
 
 @NgModule({
