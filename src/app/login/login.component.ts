@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit {
         if (res.status === 'success') {
           this._router.navigate(['chat']);
         } else {
-          alert('ERRROR! Message: ' + res.error_message);
+          alert('ERROR! Message: ' + res.error_message);
         }
       });
   }

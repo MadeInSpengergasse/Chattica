@@ -8,7 +8,7 @@ import {Status} from '../models/status';
 
 @Injectable()
 export class AuthService {
-  isLoggedIn = false;
+  private loggedIn = false;
   user: User;
 
   constructor(private _http: Http) {
@@ -16,18 +16,50 @@ export class AuthService {
   }
 
   login(username: string, password: string): Observable<Status<null>> {
-    this.isLoggedIn = true;
     console.log('sending post request');
-    return this._http.post('/api/login', {username: username, password: password}).map(res => res.json());
+    return this._http.post('/api/login', {username: username, password: password})
+      .map(res => <Status<null>>res.json())
+      .map((res) => {
+        if (res.status === 'success') {
+          this.loggedIn = true;
+          this.user = res.data;
+        }
+        return res;
+      });
   }
 
   logout(): Observable<Status<null>> {
-    this.isLoggedIn = false;
+    this.loggedIn = false;
     this.user = null;
     return this._http.post('/api/logout', {}).map(res => res.json());
   }
 
-  getSession(): Observable<Status<User>> {
-    return this._http.get('/api/session', null).map(res => res.json());
+  register(username: string, password: string): Observable<Status<null>> {
+    console.log('AuthService: register');
+    return this._http.post('/api/register', {username: username, password: password})
+      .map(res => <Status<null>>res.json())
+      .map((res) => {
+        console.log('register response:');
+        console.log(res);
+        return res;
+      });
+  }
+
+  getSession(): Observable<Status<null>> {
+    return this._http.get('/api/session', null)
+      .map(res => <Status<User>>res.json())
+      .map((res) => {
+        console.log('getSession()');
+        console.log(res);
+        if (res.status === 'success') {
+          this.loggedIn = true;
+          this.user = res.data;
+        }
+        return res;
+      });
+  }
+
+  isLoggedIn(): boolean {
+    return this.loggedIn;
   }
 }

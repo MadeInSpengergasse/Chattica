@@ -18,19 +18,13 @@ export class AppComponent implements OnInit {
   }
 
   isLoggedIn(): boolean {
-    return this._authService.isLoggedIn;
+    return this._authService.isLoggedIn();
   }
 
   getSession() {
-    this._authService.getSession()
-      .subscribe(res => {
-        console.log('getSession()');
-        console.log(res);
-        if (res.status === 'success') {
-          this._authService.isLoggedIn = true;
-          this._authService.user = res.data;
-        }
-      });
+    this._authService.getSession().subscribe(res => {
+      console.log(res);
+    });
   }
 
   logout() {
@@ -39,7 +33,7 @@ export class AppComponent implements OnInit {
         if (res.status === 'success') {
           this._router.navigate(['']);
         } else {
-          alert('ERRROR! Message: ' + res.error_message);
+          alert('ERROR! Message: ' + res.error_message);
         }
       });
   }

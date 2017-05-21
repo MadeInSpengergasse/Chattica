@@ -12,7 +12,7 @@ export class ChatService {
       },
       (msg) => {
         console.log('error', msg);
-        alert("There was an error with the websockets connection: " + msg);
+        alert('There was an error with the websockets connection: ' + msg);
       },
       () => {
         console.log('complete');
@@ -21,7 +21,7 @@ export class ChatService {
   }
 
   getDataStream() {
-    //FIXME Handle ws disconnect and reconnect (sending works but not receiving)
+    // FIXME Handle ws disconnect and reconnect (sending works but not receiving)
     return this.ws.getDataStream();
   }
 }

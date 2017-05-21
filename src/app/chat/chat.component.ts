@@ -18,7 +18,7 @@ export class ChatComponent implements OnInit {
     // this.chatMessages = [];
     this._chatService.getDataStream()
       .subscribe(a => {
-        let data = JSON.parse(a.data) as ChatMessage;
+        const data = JSON.parse(a.data) as ChatMessage;
         console.log('new event from ws');
         console.log(data);
         this.chatMessages.push(data);
