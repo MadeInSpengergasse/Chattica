@@ -77,7 +77,7 @@ app.post('/api/register', function (req, res) {
     client.get(req.body.username + ":pwhash", function (err, reply) {
       // reply is null when the key is missing
       console.log(reply);
-      if (!reply) {
+      if (reply) {
         res.json({status: "error", error_message: "User already exists."});
         return;
       }
@@ -121,9 +121,21 @@ wss.on('connection', function connection(ws) {
     // do stuff with the session here
   });
 
+  // Save connection to array
   ws_array.push(ws);
+
+  // OnMessage
   ws.on('message', function incoming(message) {
     console.log('received: %s', message);
+
+    client.incr("messagekey", function (err, reply) {
+      if (reply) {
+        client.set("message:" + reply, message);
+      } else {
+        console.log("MESSAGEKEY ERROR WHILE INCR!!!!")
+      }
+    });
+
     ws_array.forEach(function (client) {
       if (client.readyState === client.OPEN) {
         var username = ws.upgradeReq.session.user.username;
@@ -133,8 +145,21 @@ wss.on('connection', function connection(ws) {
       }
     });
   });
+
+  // Welcome message
   ws.send(JSON.stringify({username: "System", message: "Welcome to the server!"}));
 
+  client.get("messagekey", function (err, reply) {
+    for (var i = 1; i <= reply; i++) {
+      client.get("message:"+i, function(err, reply) {
+        if(reply) {
+          ws.send(JSON.stringify({username: "Not-System", message: reply}));
+        }
+      });
+    }
+  });
+
+  // OnClose
   ws.on('close', function () {
     // ws_array
     console.log("Should remove client from array.");

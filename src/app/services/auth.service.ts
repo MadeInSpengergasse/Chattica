@@ -39,8 +39,6 @@ export class AuthService {
     return this._http.post('/api/register', {username: username, password: password})
       .map(res => <Status<null>>res.json())
       .map((res) => {
-        console.log('register response:');
-        console.log(res);
         return res;
       });
   }
@@ -50,7 +48,6 @@ export class AuthService {
       .map(res => <Status<User>>res.json())
       .map((res) => {
         console.log('getSession()');
-        console.log(res);
         if (res.status === 'success') {
           this.loggedIn = true;
           this.user = res.data;
