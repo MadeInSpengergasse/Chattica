@@ -44,18 +44,23 @@ app.use(sessionParser);
 
 app.post('/api/login', function (req, res) {
   if (req.body.username && req.body.password) {
-    // var hash = getFromDbForUser(req.body.username);
-    var hash = '$2a$10$BfDijpQGEsH.UH7QSbMDuOMvZFz1sFbAZZOsvrNzmcY9Xf3IzdrNS'; // 'abc' hashed
-    if (bcrypt.compareSync(req.body.password, hash)) {
-      console.log(req.session);
-      req.session.loggedIn = true;
-      req.session.user = {};
-      console.log("Logging in new user with username : " + req.body.username);
-      req.session.user.username = req.body.username;
-      res.json({status: "success"});
-    } else {
-      res.json({status: "error", error_message: "Invalid username or password."});
-    }
+    client.get(req.body.username + ":pwhash", function (err, reply) {
+      if (!reply) {
+        res.json({status: "error", error_message: "Invalid username or password."});
+        return;
+      }
+      // var hash = '$2a$10$BfDijpQGEsH.UH7QSbMDuOMvZFz1sFbAZZOsvrNzmcY9Xf3IzdrNS'; // 'abc' hashed
+      if (bcrypt.compareSync(req.body.password, reply)) {
+        console.log(req.session);
+        req.session.loggedIn = true;
+        req.session.user = {};
+        console.log("Logging in new user with username : " + req.body.username);
+        req.session.user.username = req.body.username;
+        res.json({status: "success"});
+      } else {
+        res.json({status: "error", error_message: "Invalid username or password."});
+      }
+    });
   } else {
     res.json({status: "error", error_message: "Please supply both username and password!"});
   }
@@ -68,10 +73,23 @@ app.post('/api/logout', function (req, res) {
 
 app.post('/api/register', function (req, res) {
   console.log(req.body);
-  //TODO Save into database
-  var hash = bcrypt.hashSync(req.body.password, 10);
-  console.log("Save into db: " + req.body.username + " - " + hash);
-  res.json({status: "success"});
+  if (req.body.username && req.body.password) {
+    client.get(req.body.username + ":pwhash", function (err, reply) {
+      // reply is null when the key is missing
+      console.log(reply);
+      if (!reply) {
+        res.json({status: "error", error_message: "User already exists."});
+        return;
+      }
+      var hash = bcrypt.hashSync(req.body.password, 10);
+      client.set(req.body.username + ":pwhash", hash);
+      client.set(req.body.username + ":registered", new Date().toISOString());
+      console.log("Save into db: " + req.body.username + " - " + hash);
+      res.json({status: "success"});
+    });
+  } else {
+    res.json({status: "error", error_message: "Please supply both username and password!"});
+  }
 });
 
 app.get('/api/session', function (req, res) {
