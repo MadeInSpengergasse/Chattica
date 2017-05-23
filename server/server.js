@@ -29,7 +29,9 @@ app.use(express.static(__dirname + "/", {extensions: ['html']}));
 var sess = {
   secret: 'keyboard cat',
   cookie: {},
-  store: new RedisStore({client: client})
+  store: new RedisStore({client: client}),
+  resave: false, // RedisStore has "touch" method
+  saveUninitialized: true
 };
 
 const wss = new WebSocket.Server({port: 8080});
@@ -44,7 +46,7 @@ app.use(sessionParser);
 
 app.post('/api/login', function (req, res) {
   if (req.body.username && req.body.password) {
-    client.get(req.body.username + ":pwhash", function (err, reply) {
+    client.get("user:" + req.body.username + ":pwhash", function (err, reply) {
       if (!reply) {
         res.json({status: "error", error_message: "Invalid username or password."});
         return;
@@ -82,8 +84,8 @@ app.post('/api/register', function (req, res) {
         return;
       }
       var hash = bcrypt.hashSync(req.body.password, 10);
-      client.set(req.body.username + ":pwhash", hash);
-      client.set(req.body.username + ":registered", new Date().toISOString());
+      client.set("user:" + req.body.username + ":pwhash", hash);
+      client.set("user:" + req.body.username + ":registered", new Date().toISOString());
       console.log("Save into db: " + req.body.username + " - " + hash);
       res.json({status: "success"});
     });
@@ -119,10 +121,18 @@ wss.on('connection', function connection(ws) {
   sessionParser(ws.upgradeReq, {}, function () {
     console.log(ws.upgradeReq.session);
     // do stuff with the session here
+    // console.log(ws.upgradeReq.session);
+    if (!ws.upgradeReq.session.loggedIn) {
+      ws.send(JSON.stringify({
+        username: "Server",
+        message: "You are not logged in! Please visit the login page, you will not receive messages!"
+      }));
+      return;
+    }
+    // Save connection to array
+    ws_array.push(ws);
   });
 
-  // Save connection to array
-  ws_array.push(ws);
 
   // OnMessage
   ws.on('message', function incoming(message) {
@@ -130,7 +140,9 @@ wss.on('connection', function connection(ws) {
 
     client.incr("messagekey", function (err, reply) {
       if (reply) {
-        client.set("message:" + reply, message);
+        var username = ws.upgradeReq.session.user.username;
+        console.log("saving to database: " + message + " - " + username);
+        client.set("message:" + reply, JSON.stringify({username: username, message: message}));
       } else {
         console.log("MESSAGEKEY ERROR WHILE INCR!!!!")
       }
@@ -149,12 +161,18 @@ wss.on('connection', function connection(ws) {
   // Welcome message
   ws.send(JSON.stringify({username: "System", message: "Welcome to the server!"}));
 
-  client.get("messagekey", function (err, reply) {
-    for (var i = 1; i <= reply; i++) {
-      client.get("message:"+i, function(err, reply) {
-        if(reply) {
-          ws.send(JSON.stringify({username: "Not-System", message: reply}));
+  client.get("messagekey", function (err, reply) { // get max key
+    for (var i = 1; i <= reply; i++) { // for loop
+      client.get("message:" + i, function (err, reply) { // get message
+        if (reply) {
+          var a = JSON.parse(reply);
+          ws.send(JSON.stringify({username: a.username, message: a.message})); // actually send
+        } else {
+          console.log("redis errors:");
+          console.log(err);
+          console.log(reply);
         }
+
       });
     }
   });
