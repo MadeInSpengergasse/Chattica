@@ -129,6 +129,13 @@ wss.on('connection', function connection(ws) {
       }));
       return;
     }
+    if (!ws.upgradeReq.session.user.username) {
+      ws.send(JSON.stringify({
+        username: "Server",
+        message: "Your username is missing! If you do this intentionally, fuck you!"
+      }));
+      return;
+    }
     // Save connection to array
     ws_array.push(ws);
   });
@@ -136,6 +143,13 @@ wss.on('connection', function connection(ws) {
 
   // OnMessage
   ws.on('message', function incoming(message) {
+    if (!ws.upgradeReq.session.user.username) {
+      ws.send(JSON.stringify({
+        username: "Server",
+        message: "Your username is missing! If you do this intentionally, fuck you!"
+      }));
+      return;
+    }
     console.log('received: %s', message);
 
     client.incr("messagekey", function (err, reply) {
@@ -161,6 +175,7 @@ wss.on('connection', function connection(ws) {
   // Welcome message
   ws.send(JSON.stringify({username: "System", message: "Welcome to the server!"}));
 
+  // Send all saved messages to the new client.
   client.get("messagekey", function (err, reply) { // get max key
     for (var i = 1; i <= reply; i++) { // for loop
       client.get("message:" + i, function (err, reply) { // get message
