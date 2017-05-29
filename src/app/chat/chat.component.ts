@@ -1,30 +1,27 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ChatService} from '../services/chat.service';
-import {ChatMessage} from '../models/chatmessage';
+import {Subscription} from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, OnDestroy {
   currentMessage: string;
-  chatMessages: ChatMessage[] = [];
+  private _subscription: Subscription;
 
   constructor(private _chatService: ChatService) {
-    console.log("constructor");
+    console.log('constructor');
   }
 
   ngOnInit() {
-    console.log("ngOnInit()");
-    // this.chatMessages = [];
-    this._chatService.getDataStream()
-      .subscribe(a => {
-        const data = JSON.parse(a.data) as ChatMessage;
-        console.log('new event from ws');
-        console.log(data);
-        this.chatMessages.push(data);
-      });
+    console.log('ngOnInit()');
+    this._subscription = this._chatService.getDataStream().subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this._subscription.unsubscribe();
   }
 
   sendMessage() {
@@ -35,5 +32,9 @@ export class ChatComponent implements OnInit {
       console.log('Not sending empty message.');
     }
     this.currentMessage = '';
+  }
+
+  getChatMessages() {
+    return this._chatService.chatMessages;
   }
 }

@@ -1,9 +1,10 @@
-<div class="box">
-  <div class="chatmessages">
-    <div *ngFor="let chatMessage of chatMessages"><b>{{chatMessage.username}}: </b>{{chatMessage.message}}
+<div class="panel panel-default">
+  <div class="panel-body msg_container_base chat">
+    <div *ngFor="let chatMessage of getChatMessages()">
+      <b>{{chatMessage.username}}: </b>{{chatMessage.message}}
     </div>
   </div>
-  <div class="col-lg-6 messageinput">
+  <div class="panel-footer col-lg-6 messageinput">
     <div class="input-group">
       <input type="text" class="form-control" placeholder="Send message..." [(ngModel)]="currentMessage"
              (keyup.enter)="sendMessage()">

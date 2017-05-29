@@ -1,9 +1,11 @@
 import {Injectable} from '@angular/core';
 import {$WebSocket} from 'angular2-websocket/angular2-websocket';
+import {ChatMessage} from '../models/chatmessage';
 
 @Injectable()
 export class ChatService {
-  ws = new $WebSocket('ws://' + location.hostname + ':8080/');
+  private ws = new $WebSocket('ws://' + location.hostname + ':8080/');
+  chatMessages: ChatMessage[] = [];
 
   sendMessage(message: string) {
     this.ws.send(message).subscribe(
@@ -22,6 +24,12 @@ export class ChatService {
 
   getDataStream() {
     // FIXME Handle ws disconnect and reconnect (sending works but not receiving)
-    return this.ws.getDataStream();
+    return this.ws.getDataStream()
+      .map(a => {
+        const data = JSON.parse(a.data) as ChatMessage;
+        console.log('new event from ws');
+        console.log(data);
+        this.chatMessages.push(data);
+      });
   }
 }
