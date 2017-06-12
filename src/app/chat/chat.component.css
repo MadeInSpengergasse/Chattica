@@ -8,10 +8,14 @@
 .messageinput {
   min-width: 100%;
   padding: 15px;
-  background-color: red;
+  background-color: lightgray;
   bottom: 0;
   right: 0;
   left: 0;
   position: fixed;
 }
 
+.height100 {
+  height: 86vh;
+  overflow-y: scroll;
+}
